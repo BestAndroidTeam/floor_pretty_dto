@@ -36,9 +36,9 @@ class UserComment {
 @PrettyDto("SELECT blablablablabla")
 class UserDto {
   final User user;
-  final List<UserComment> comments;
+  final UserComment comment;
 
-  UserDto({this.user, this.comments});
+  UserDto({this.user, this.comment});
 }
 
 ```
@@ -53,14 +53,16 @@ class DirtyUserDto {
   final String userName;
   final int siteId;
   final String siteName;
-  final List comments;
+  final int commentId;
+  final String commentContent;
 
   DirtyUserDto({
     this.userId,
     this.userName,
     this.siteId,
     this.siteName,
-    this.comments,
+    this.commentId,
+    this.commentContent,
   });
 
   UserDto toPrettyDto() {
@@ -73,7 +75,10 @@ class DirtyUserDto {
           siteName: siteName,
         ),
       ),
-      comments: comments,
+      comment: UserComment(
+        commentId: commentId,
+        commentContent: commentContent,
+      ),
     );
   }
 }

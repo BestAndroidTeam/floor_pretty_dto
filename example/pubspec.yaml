@@ -11,12 +11,12 @@ dependencies:
     sdk: flutter
   floor: any
 
-#  floor_pretty_dto:
-#    git:
-#      url: git://github.com/BestAndroidTeam/floor_pretty_dto.git
-#      path: floor_pretty_dto
   floor_pretty_dto:
-    path: ../floor_pretty_dto/
+    git:
+      url: git://github.com/BestAndroidTeam/floor_pretty_dto.git
+      path: floor_pretty_dto
+#  floor_pretty_dto:
+#    path: ../floor_pretty_dto/
 
 dev_dependencies:
   flutter_test:
@@ -27,6 +27,8 @@ dev_dependencies:
     git:
       url: git://github.com/BestAndroidTeam/floor_pretty_dto.git
       path: floor_pretty_dto_generator
+#  floor_pretty_dto_generator:
+#    path: ../floor_pretty_dto_generator/
 
 
 flutter:

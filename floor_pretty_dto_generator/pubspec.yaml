@@ -17,6 +17,8 @@ dependencies:
     git:
       url: git://github.com/BestAndroidTeam/floor_pretty_dto.git
       path: floor_pretty_dto
+#  floor_pretty_dto:
+#    path: ../floor_pretty_dto/
 
 dev_dependencies:
   build_test: ^0.10.12
