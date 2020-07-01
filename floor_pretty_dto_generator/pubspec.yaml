@@ -1,0 +1,21 @@
+name: floor_pretty_dto_generator
+description: Pretty Dtos for floor.
+version: 0.1.0
+author: Ltei <xavier.peltier@outlook.com>
+homepage: https://github.com/Ltei/floor_pretty_dto
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+
+dependencies:
+  build: '^1.2.2'
+  source_gen: ^0.9.4+7
+  code_builder: ^3.2.1
+
+  floor_annotation: any
+  floor_pretty_dto:
+    path: ../floor_pretty_dto/
+
+dev_dependencies:
+  build_test: ^0.10.12
+  test: ^1.11.0
