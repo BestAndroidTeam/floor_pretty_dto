@@ -47,6 +47,7 @@ The generator will generate this :
 
 ```dart
 
+@DatabaseView("SELECT blablablablabla")
 class DirtyUserDto {
   final int userId;
   final String userName;
