@@ -1,5 +1,5 @@
 class PrettyDto {
-  const PrettyDto();
-}
+  final String query;
 
-const PrettyDto prettyDto = const PrettyDto();
+  const PrettyDto(this.query);
+}

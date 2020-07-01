@@ -6,12 +6,13 @@ import 'package:floor_pretty_dto_generator/src/annotation_utils.dart';
 class ClassElementInfo {
   final ClassElement clazz;
   final String name;
+  final String query;
   final List<FieldInfo> fields;
   final ConstructorElement primaryConstructor;
 
   final List<FieldInfo> foldedFields;
 
-  ClassElementInfo._(this.clazz, this.name, this.fields, this.primaryConstructor)
+  ClassElementInfo._(this.clazz, this.name, this.query, this.fields, this.primaryConstructor)
       : this.foldedFields = _getFoldedFields(name, fields);
 
   static ClassElementInfo parse(ClassElement clazz) {
@@ -30,11 +31,12 @@ class ClassElementInfo {
       return FieldInfo(name: fieldElement.name, type: fieldElement.type);
     }
 
+    final prettyDtoAnnotation = AnnotationUtils.loadPrettyDtoAnnotation(clazz);
     final fields = clazz.fields.where((e) => !e.isStatic && !e.isSynthetic).map((e) {
       return getFieldInfo(e);
     }).toList();
     final primaryConstructor = _getPrimaryConstructor(clazz);
-    return ClassElementInfo._(clazz, name, fields, primaryConstructor);
+    return ClassElementInfo._(clazz, name, prettyDtoAnnotation.query, fields, primaryConstructor);
   }
 
   String get constructorCallConstString =>

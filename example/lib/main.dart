@@ -29,7 +29,7 @@ class UserComment {
   UserComment({this.commentId, this.commentContent});
 }
 
-@prettyDto
+@PrettyDto("SELECT blablablablabla")
 class UserDto {
   final User user;
   final List<UserComment> comments;
