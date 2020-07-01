@@ -15,7 +15,7 @@ dependencies:
   floor_annotation: any
   floor_pretty_dto:
     git:
-      url: git://github.com/BestAndroidTeam/floor_pretty_dto.git
+      url: https://github.com/BestAndroidTeam/floor_pretty_dto.git
       path: floor_pretty_dto
 #  floor_pretty_dto:
 #    path: ../floor_pretty_dto/
