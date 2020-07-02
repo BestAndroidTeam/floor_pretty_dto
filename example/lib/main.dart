@@ -31,10 +31,11 @@ class UserComment {
 
 @PrettyDto("SELECT blablablablabla")
 class UserDto {
+  final List<int> tags;
   final User user;
   final UserComment comment;
 
-  UserDto({this.user, this.comment});
+  UserDto({this.tags, this.user, this.comment});
 }
 
 class App extends StatelessWidget {
