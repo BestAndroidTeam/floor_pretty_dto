@@ -34,7 +34,7 @@ class DataClassGenerator extends GeneratorForAnnotation<PrettyDto> {
     code.write("@DatabaseView(\"${classElementInfo.annotation.query}\"$viewNameCode)\n");
     code.write("class Dirty${classElementInfo.name} {\n");
     for (final field in classElementInfo.foldedFields) {
-      code.write("final ${field.type.name} ${field.name};\n");
+      code.write("final ${field.type} ${field.name};\n");
     }
     code.write("\n\n");
     code.write(_generateDirtyDtoConstructor(classElementInfo));
