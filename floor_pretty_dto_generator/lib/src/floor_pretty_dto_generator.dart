@@ -47,11 +47,15 @@ class DataClassGenerator extends GeneratorForAnnotation<PrettyDto> {
 
   String _generateDirtyDtoConstructor(ClassElementInfo classElementInfo) {
     final code = StringBuffer();
-    code.write("Dirty${classElementInfo.name}({\n");
-    for (final field in classElementInfo.foldedFields) {
-      code.write("this.${field.name},");
+    if (classElementInfo.foldedFields.isNotEmpty) {
+      code.write("Dirty${classElementInfo.name}({\n");
+      for (final field in classElementInfo.foldedFields) {
+        code.write("this.${field.name},");
+      }
+      code.write("});");
+    } else {
+      code.write("Dirty${classElementInfo.name}();");
     }
-    code.write("});");
     return code.toString();
   }
 

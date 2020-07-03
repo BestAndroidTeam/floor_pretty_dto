@@ -3,6 +3,7 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:floor_annotation/floor_annotation.dart';
 import 'package:floor_pretty_dto/floor_pretty_dto.dart';
 import 'package:floor_pretty_dto_generator/src/annotation_utils.dart';
+import 'package:source_gen/source_gen.dart';
 
 class ClassElementInfo {
   final ClassElement clazz;
@@ -14,7 +15,7 @@ class ClassElementInfo {
   final List<FieldInfo> foldedFields;
 
   ClassElementInfo._(this.clazz, this.name, this.annotation, this.fields, this.primaryConstructor)
-      : this.foldedFields = _getFoldedFields(name, fields);
+      : this.foldedFields = _getFoldedFields(clazz, name, fields);
 
   static ClassElementInfo parse(ClassElement clazz) {
     final name = clazz.name;
@@ -56,24 +57,29 @@ class ClassElementInfo {
       if (classElement.constructors.length == 1) {
         constructor = classElement.constructors[0];
       } else {
-        throw Exception("Couldn't determine primary constructor for class ${classElement.name}.");
+        throw InvalidGenerationSourceError("Couldn't determine primary constructor for class ${classElement.name}.",
+            element: classElement);
       }
     }
     return constructor;
   }
 
-  static List<FieldInfo> _getFoldedFields(String className, List<FieldInfo> rootFields) {
+  static List<FieldInfo> _getFoldedFields(ClassElement classElement, String className, List<FieldInfo> rootFields) {
     // Verify that field names are unique
-    final Map<String, String> fieldNameBySource = Map();
+    final Map<String, FieldSourceAndType> fieldNameBySource = Map();
     void fillFieldNameBySource(String sourcePath, FieldInfo field) {
-      final actualPath = (sourcePath == "") ? field.name : "$sourcePath.${field.name}";
+      final currentPath = (sourcePath == "") ? field.name : "$sourcePath.${field.name}";
       if (field is EntityFieldInfo) {
-        for (final it in field.fields) fillFieldNameBySource(actualPath, it);
+        for (final it in field.fields) fillFieldNameBySource(currentPath, it);
       } else {
         if (fieldNameBySource.containsKey(field.name)) {
-          throw Exception("Duplicate field name \"${field.name}\" (${fieldNameBySource[field.name]}, in $actualPath)");
+          final lastField = fieldNameBySource[field.name];
+          if (lastField.type != field.type) {
+            throw InvalidGenerationSourceError("Duplicate field name \"${field.name}\" (is ${lastField.type} in ${lastField.source}, is ${field.type} in $currentPath)",
+                element: classElement);
+          }
         } else {
-          fieldNameBySource[field.name] = actualPath;
+          fieldNameBySource[field.name] = FieldSourceAndType(source: currentPath, type: field.type);
         }
       }
     }
@@ -85,7 +91,7 @@ class ClassElementInfo {
     void fillFieldAcc(List<FieldInfo> acc, FieldInfo field) {
       if (field is EntityFieldInfo) {
         for (final it in field.fields) fillFieldAcc(acc, it);
-      } else {
+      } else if (acc.firstWhere((e) => e.name == field.name, orElse: () => null) == null) {
         acc.add(field);
       }
     }
@@ -102,9 +108,13 @@ class FieldInfo {
   final DartType type;
 
   FieldInfo({this.name, this.type});
+}
 
-  @override
-  String toString() => "{name=$name, type=$type}";
+class FieldSourceAndType {
+  final String source;
+  final DartType type;
+
+  FieldSourceAndType({this.source, this.type});
 }
 
 class EntityFieldInfo extends FieldInfo {
