@@ -1,18 +1,19 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:floor_annotation/floor_annotation.dart';
+import 'package:floor_pretty_dto/floor_pretty_dto.dart';
 import 'package:floor_pretty_dto_generator/src/annotation_utils.dart';
 
 class ClassElementInfo {
   final ClassElement clazz;
   final String name;
-  final String query;
+  final PrettyDto annotation;
   final List<FieldInfo> fields;
   final ConstructorElement primaryConstructor;
 
   final List<FieldInfo> foldedFields;
 
-  ClassElementInfo._(this.clazz, this.name, this.query, this.fields, this.primaryConstructor)
+  ClassElementInfo._(this.clazz, this.name, this.annotation, this.fields, this.primaryConstructor)
       : this.foldedFields = _getFoldedFields(name, fields);
 
   static ClassElementInfo parse(ClassElement clazz) {
@@ -36,7 +37,7 @@ class ClassElementInfo {
       return getFieldInfo(e);
     }).toList();
     final primaryConstructor = _getPrimaryConstructor(clazz);
-    return ClassElementInfo._(clazz, name, prettyDtoAnnotation.query, fields, primaryConstructor);
+    return ClassElementInfo._(clazz, name, prettyDtoAnnotation, fields, primaryConstructor);
   }
 
   String get constructorCallConstString =>

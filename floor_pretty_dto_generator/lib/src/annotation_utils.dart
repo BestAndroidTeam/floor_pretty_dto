@@ -20,6 +20,7 @@ class AnnotationUtils {
 
   static PrettyDto loadPrettyDtoAnnotation(Element element) {
     final annotation = getAnnotation(element, PrettyDto);
-    return PrettyDto(annotation?.getField("query")?.toStringValue());
+    return PrettyDto(annotation?.getField("query")?.toStringValue(),
+        viewName: annotation?.getField("viewName")?.toStringValue());
   }
 }
