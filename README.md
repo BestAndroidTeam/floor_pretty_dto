@@ -33,12 +33,13 @@ class UserComment {
   UserComment({this.commentId, this.commentContent});
 }
 
-@PrettyDto("SELECT blablablablabla")
+@PrettyDto("SELECT blablablablabla", viewName: "myViewName")
 class UserDto {
+  final List<int> tags;
   final User user;
   final UserComment comment;
 
-  UserDto({this.user, this.comment});
+  UserDto({this.tags, this.user, this.comment});
 }
 
 ```
@@ -47,8 +48,9 @@ The generator will generate this :
 
 ```dart
 
-@DatabaseView("SELECT blablablablabla")
+@DatabaseView("SELECT blablablablabla", viewName: "myViewName")
 class DirtyUserDto {
+  final List<int> tags;
   final int userId;
   final String userName;
   final int siteId;
@@ -57,6 +59,7 @@ class DirtyUserDto {
   final String commentContent;
 
   DirtyUserDto({
+    this.tags,
     this.userId,
     this.userName,
     this.siteId,
@@ -67,6 +70,7 @@ class DirtyUserDto {
 
   UserDto toPrettyDto() {
     return UserDto(
+      tags: tags,
       user: User(
         userId: userId,
         userName: userName,

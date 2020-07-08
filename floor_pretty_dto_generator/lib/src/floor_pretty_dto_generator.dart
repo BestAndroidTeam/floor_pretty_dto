@@ -26,8 +26,12 @@ class PrettyDtoGenerator extends GeneratorForAnnotation<PrettyDto> {
   }
 
   String _generateDirtyDto(ClassElementInfo classElementInfo) {
+    final viewNameCode = StringBuffer();
+    if (classElementInfo.annotation.viewName != null) {
+      viewNameCode.write(", viewName: \"${classElementInfo.annotation.viewName}\"");
+    }
     final code = StringBuffer();
-    code.write("@DatabaseView(\"${classElementInfo.query}\")\n");
+    code.write("@DatabaseView(\"${classElementInfo.annotation.query}\"$viewNameCode)\n");
     code.write("class Dirty${classElementInfo.name} {\n");
     for (final field in classElementInfo.foldedFields) {
       code.write("final ${field.type} ${field.name};\n");
@@ -43,11 +47,15 @@ class PrettyDtoGenerator extends GeneratorForAnnotation<PrettyDto> {
 
   String _generateDirtyDtoConstructor(ClassElementInfo classElementInfo) {
     final code = StringBuffer();
-    code.write("Dirty${classElementInfo.name}({\n");
-    for (final field in classElementInfo.foldedFields) {
-      code.write("this.${field.name},");
+    if (classElementInfo.foldedFields.isNotEmpty) {
+      code.write("Dirty${classElementInfo.name}({\n");
+      for (final field in classElementInfo.foldedFields) {
+        code.write("this.${field.name},");
+      }
+      code.write("});");
+    } else {
+      code.write("Dirty${classElementInfo.name}();");
     }
-    code.write("});");
     return code.toString();
   }
 

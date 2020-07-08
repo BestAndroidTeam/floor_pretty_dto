@@ -29,7 +29,7 @@ class UserComment {
   UserComment({this.commentId, this.commentContent});
 }
 
-@PrettyDto("SELECT blablablablabla")
+@PrettyDto("SELECT blablablablabla", viewName: "myViewName")
 class UserDto {
   final List<int> tags;
   final User user;
