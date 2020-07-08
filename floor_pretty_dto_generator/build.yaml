@@ -9,7 +9,7 @@ builders:
     target: ":floor_pretty_dto_generator"
     import: "package:floor_pretty_dto_generator/builder.dart"
     # The builder function name, which gets called on build/watch
-    builder_factories: ["dataClass"]
+    builder_factories: ["prettyDto"]
     # The 'partId' argument to 'SharedPartBuilder' is 'floor_pretty_dto'
     build_extensions: {".dart": [".floor_pretty_dto.g.part"]}
 

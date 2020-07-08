@@ -7,7 +7,7 @@ import 'package:floor_pretty_dto/floor_pretty_dto.dart';
 import 'package:floor_pretty_dto_generator/src/class_element_info.dart';
 import 'package:source_gen/source_gen.dart';
 
-class DataClassGenerator extends GeneratorForAnnotation<PrettyDto> {
+class PrettyDtoGenerator extends GeneratorForAnnotation<PrettyDto> {
   @override
   FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) {
     if (element is! ClassElement)

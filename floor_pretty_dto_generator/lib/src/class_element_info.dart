@@ -15,6 +15,10 @@ class ClassElementInfo {
   ClassElementInfo._(this.clazz, this.name, this.query, this.fields, this.primaryConstructor)
       : this.foldedFields = _getFoldedFields(name, fields);
 
+  static Iterable<FieldElement> getDataFields(ClassElement clazz) {
+    return clazz.fields.where((e) => !e.isStatic && !e.isSynthetic);
+  }
+
   static ClassElementInfo parse(ClassElement clazz) {
     final name = clazz.name;
     FieldInfo getFieldInfo(FieldElement fieldElement) {
@@ -24,7 +28,7 @@ class ClassElementInfo {
           return EntityFieldInfo(
             name: fieldElement.name,
             type: fieldElement.type,
-            fields: fieldTypeClassElement.fields.map((e) => getFieldInfo(e)).toList(),
+            fields: getDataFields(fieldTypeClassElement).map((e) => getFieldInfo(e)).toList(),
           );
         }
       }
@@ -32,9 +36,7 @@ class ClassElementInfo {
     }
 
     final prettyDtoAnnotation = AnnotationUtils.loadPrettyDtoAnnotation(clazz);
-    final fields = clazz.fields.where((e) => !e.isStatic && !e.isSynthetic).map((e) {
-      return getFieldInfo(e);
-    }).toList();
+    final fields = getDataFields(clazz).map((e) => getFieldInfo(e)).toList();
     final primaryConstructor = _getPrimaryConstructor(clazz);
     return ClassElementInfo._(clazz, name, prettyDtoAnnotation.query, fields, primaryConstructor);
   }
